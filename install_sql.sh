@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 apt install iotop
@@ -15,7 +14,7 @@ export MSSQL_SA_PASSWORD="Drakkars01"
 # Use the following variables to control your install:
 
 # Product ID of the version of SQL server you're installing
-# Must be evaluation, developer, express, web, standard, enterprise, or your 25                                                                                                                                                              digit product key
+# Must be evaluation, developer, express, web, standard, enterprise, or your 25 digit product key
 # Defaults to developer
 export MSSQL_PID="enterprise"
 
