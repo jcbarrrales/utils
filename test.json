@@ -5,6 +5,7 @@
         "Query": "SELECT TOP(50)   @@servername AS Label_ServerName , '$dbname' AS Label_DbName , p.name AS Label_SpName , qs.total_worker_time AS Gauge_TotalWorkerTime , qs.total_worker_time/qs.execution_count AS Gauge_AvgWorkerTime , qs.execution_count as Gauge_ExecutionCount , qs.total_elapsed_time as Gauge_TotalElapsedTime , qs.total_elapsed_time/qs.execution_count AS Gauge_AvgElapsedTime FROM $dbname.sys.procedures AS p WITH (NOLOCK) INNER JOIN $dbname.sys.dm_exec_procedure_stats AS qs WITH (NOLOCK) ON p.object_id = qs.object_id WHERE 1=1 ",
         "Description": "Counts the number of processes per status",
         "Usage": "MultipleWithLabels",
+        "Postfix": " ORDER BY qs.total_worker_time DESC ",  
         "RunOnAllTargets": true,
         "Columns": [
           {
