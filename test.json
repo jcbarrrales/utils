@@ -1,0 +1,85 @@
+{
+    "Queries": [
+      {
+        "Name": "mssql_sp_status",
+        "Query": "SELECT TOP(50)   @@servername AS Label_ServerName , '$dbname' AS Label_DbName , p.name AS Label_SpName , qs.total_worker_time AS Gauge_TotalWorkerTime , qs.total_worker_time/qs.execution_count AS Gauge_AvgWorkerTime , qs.execution_count as Gauge_ExecutionCount , qs.total_elapsed_time as Gauge_TotalElapsedTime , qs.total_elapsed_time/qs.execution_count AS Gauge_AvgElapsedTime FROM $dbname.sys.procedures AS p WITH (NOLOCK) INNER JOIN $dbname.sys.dm_exec_procedure_stats AS qs WITH (NOLOCK) ON p.object_id = qs.object_id WHERE 1=1 ",
+        "Description": "Counts the number of processes per status",
+        "Usage": "MultipleWithLabels",
+        "RunOnAllTargets": true,
+        "Columns": [
+          {
+            "Name": "locks",
+            "Label": "locks",
+            "Usage": "Counter",
+            "Order": 0
+          },
+          {
+            "Name": "host_name",
+            "Label": "hostname",
+            "Usage": "CounterLabel"
+          },
+          {
+            "Name": "program_name",
+            "Label": "programname",
+            "Usage": "CounterLabel"
+          },
+          {
+            "Name": "database",
+            "Label": "database",
+            "Usage": "CounterLabel"
+          },
+          {
+            "Name": "login_name",
+            "Label": "loginname",
+            "Usage": "CounterLabel"
+          },
+          {
+            "Name": "job",
+            "Label": "job",
+            "Usage": "CounterLabel"
+          }
+        ]
+      },
+      {
+        "Name": "mssql_process_status",
+        "Query": "select count(r.blocking_session_id) as 'locks', s.host_name, s.program_name, d.name as 'database', s.login_name, j.name 'job' from sys.dm_exec_requests r inner join sys.dm_exec_sessions s on r.blocking_session_id = s.session_id inner join sys.sysdatabases d on r.database_id = d.dbid left outer join msdb.dbo.sysjobs j on s.program_name like concat('%(Job ', j.job_id, ')') where blocking_session_id <> 0 group by r.blocking_session_id, s.host_name, s.program_name, r.database_id, d.name, s.login_name, j.name",
+        "Description": "Counts the number of processes per status",
+        "Usage": "GaugeWithLabels",
+        "Columns": [
+          {
+            "Name": "locks",
+            "Label": "locks",
+            "Usage": "Gauge",
+            "Order": 0
+          },
+          {
+            "Name": "host_name",
+            "Label": "hostname",
+            "Usage": "GaugeLabel"
+          },
+          {
+            "Name": "program_name",
+            "Label": "programname",
+            "Usage": "GaugeLabel"
+          },
+          {
+            "Name": "database",
+            "Label": "database",
+            "Usage": "GaugeLabel"
+          },
+          {
+            "Name": "login_name",
+            "Label": "loginname",
+            "Usage": "GaugeLabel"
+          },
+          {
+            "Name": "job",
+            "Label": "job",
+            "Usage": "GaugeLabel"
+          }
+        ]
+      }
+    ],
+    
+    "MillisecondTimeout": 1000
+}
